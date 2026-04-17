@@ -4,6 +4,7 @@ import com.smartcampus.model.Room;
 import com.smartcampus.model.Sensor;
 import com.smartcampus.model.SensorReading;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,7 +20,7 @@ public class CampusDataStore {
     // Data maps for in-memory storage
     private final Map<String, Room> rooms = new ConcurrentHashMap<>();
     private final Map<String, Sensor> sensors = new ConcurrentHashMap<>();
-    private final Map<String, SensorReading> readings = new ConcurrentHashMap<>();
+    private final Map<String, List<SensorReading>> readings = new ConcurrentHashMap<>();
 
     private CampusDataStore() {
         // Private constructor for singleton pattern
@@ -40,7 +41,7 @@ public class CampusDataStore {
         return sensors;
     }
 
-    public Map<String, SensorReading> getReadings() {
+    public Map<String, List<SensorReading>> getReadings() {
         return readings;
     }
 
@@ -59,6 +60,11 @@ public class CampusDataStore {
     // Find a specific room by id
     public Room getRoomById(String id) {
         return rooms.get(id);
+    }
+
+    // Check if a room exists
+    public boolean roomExists(String roomId) {
+        return rooms.containsKey(roomId);
     }
 
     // Check if room exists and has no sensors
