@@ -60,4 +60,24 @@ public class CampusDataStore {
     public Room getRoomById(String id) {
         return rooms.get(id);
     }
+
+    // Check if room exists and has no sensors
+    public boolean canDeleteRoom(String roomId) {
+        Room room = getRoomById(roomId);
+        if (room == null) {
+            return false;
+        }
+        // Iterate through all sensors to see if any belong to this room
+        for (Sensor sensor : sensors.values()) {
+            if (roomId.equals(sensor.getRoomId())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Remove the room from the data store
+    public void deleteRoom(String roomId) {
+        rooms.remove(roomId);
+    }
 }
