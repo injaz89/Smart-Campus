@@ -43,4 +43,21 @@ public class CampusDataStore {
     public Map<String, SensorReading> getReadings() {
         return readings;
     }
+
+    // Return a list of all rooms
+    public java.util.List<Room> getAllRooms() {
+        return new java.util.ArrayList<>(rooms.values());
+    }
+
+    // Add a new room to the map
+    public void addRoom(Room room) {
+        if (room != null && room.getId() != null) {
+            rooms.put(room.getId(), room);
+        }
+    }
+
+    // Find a specific room by id
+    public Room getRoomById(String id) {
+        return rooms.get(id);
+    }
 }
