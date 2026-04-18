@@ -86,4 +86,14 @@ public class CampusDataStore {
     public void deleteRoom(String roomId) {
         rooms.remove(roomId);
     }
+
+    // Add a new sensor to the map, validating its room first
+    public void addSensor(Sensor sensor) {
+        if (!roomExists(sensor.getRoomId())) {
+            throw new IllegalArgumentException("Cannot add sensor: Room with ID " + sensor.getRoomId() + " does not exist.");
+        }
+        if (sensor != null && sensor.getId() != null) {
+            sensors.put(sensor.getId(), sensor);
+        }
+    }
 }
