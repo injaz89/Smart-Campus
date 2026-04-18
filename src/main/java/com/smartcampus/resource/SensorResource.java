@@ -9,7 +9,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 // Maps all requests for /api/v1/sensors to this class
 @Path("/sensors")
@@ -61,5 +63,24 @@ public class SensorResource {
         
         // Return 200 OK with the sensor specifics
         return Response.ok(sensor).build();
+    }
+
+    // Handles GET requests to retrieve all sensors with optional type filtering
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllSensors(@QueryParam("type") String type) {
+        // Get all sensors as a list
+        List<Sensor> allSensors = new java.util.ArrayList<>(dataStore.getSensors().values());
+        
+        // If type parameter is present, return a filtered list
+        if (type != null && !type.trim().isEmpty()) {
+            List<Sensor> filteredSensors = allSensors.stream()
+                .filter(sensor -> type.equalsIgnoreCase(sensor.getType()))
+                .collect(Collectors.toList());
+            return Response.ok(filteredSensors).build();
+        }
+        
+        // Return the full list if no filter was provided
+        return Response.ok(allSensors).build();
     }
 }
