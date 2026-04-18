@@ -20,7 +20,7 @@ public class CampusDataStore {
     // Data maps for in-memory storage
     private final Map<String, Room> rooms = new ConcurrentHashMap<>();
     private final Map<String, Sensor> sensors = new ConcurrentHashMap<>();
-    private final Map<String, List<SensorReading>> readings = new ConcurrentHashMap<>();
+    private final Map<String, List<SensorReading>> readingsHistory = new ConcurrentHashMap<>();
 
     private CampusDataStore() {
         // Private constructor for singleton pattern
@@ -41,8 +41,8 @@ public class CampusDataStore {
         return sensors;
     }
 
-    public Map<String, List<SensorReading>> getReadings() {
-        return readings;
+    public Map<String, List<SensorReading>> getReadingsHistory() {
+        return readingsHistory;
     }
 
     // Return a list of all rooms
@@ -94,6 +94,19 @@ public class CampusDataStore {
         }
         if (sensor != null && sensor.getId() != null) {
             sensors.put(sensor.getId(), sensor);
+        }
+    }
+
+    // Add a reading into the history and update the parent sensor's current value side-effect
+    public void addReading(String sensorId, SensorReading reading) {
+        // Initialize list and add the reading
+        readingsHistory.putIfAbsent(sensorId, new java.util.concurrent.CopyOnWriteArrayList<>());
+        readingsHistory.get(sensorId).add(reading);
+        
+        // Find the sensor and dynamically update its current value
+        Sensor sensor = sensors.get(sensorId);
+        if (sensor != null) {
+            sensor.setCurrentValue(reading.getValue());
         }
     }
 }

@@ -8,6 +8,7 @@ public class Sensor {
     private String roomId;
     private String type; // e.g., TEMPERATURE, HUMIDITY, MOTION
     private String status; // e.g., ACTIVE, INACTIVE, MAINTENANCE
+    private Double currentValue; // Latest reading value
 
     public Sensor() {
         // Default constructor required for JSON mapping
@@ -50,5 +51,13 @@ public class Sensor {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Double getCurrentValue() {
+        return currentValue;
+    }
+
+    public void setCurrentValue(Double currentValue) {
+        this.currentValue = currentValue;
     }
 }
