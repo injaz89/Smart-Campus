@@ -83,4 +83,16 @@ public class SensorResource {
         // Return the full list if no filter was provided
         return Response.ok(allSensors).build();
     }
+
+    // Sub-Resource Locator: Passes control to the SensorReadingResource subclass
+    // Note: Deliberately has no @GET, @POST, etc., allowing the sub-resource to define the endpoints
+    @Path("/{sensorId}/readings")
+    public SensorReadingResource getSensorReadingResource(@PathParam("sensorId") String sensorId) {
+        // Data Consistency check: Return 404 Not Found if the parent sensor does not exist
+        if (!dataStore.getSensors().containsKey(sensorId)) {
+            throw new WebApplicationException("Sensor not found.", Response.Status.NOT_FOUND);
+        }
+        
+        return new SensorReadingResource(sensorId);
+    }
 }
