@@ -30,21 +30,15 @@ public class SensorResource {
             newSensor.setId(UUID.randomUUID().toString());
         }
         
-        try {
-            // Attempt to add the sensor to validate the room relationship
-            dataStore.addSensor(newSensor);
-            
-            // Build the URI for the newly created sensor dynamically
-            URI location = uriInfo.getAbsolutePathBuilder().path(newSensor.getId()).build();
-            
-            // Return 201 Created with Location header and the generated entity
-            return Response.created(location).entity(newSensor).build();
-        } catch (IllegalArgumentException e) {
-            // Return 400 Bad Request if validation (e.g., room existence) fails
-            return Response.status(Response.Status.BAD_REQUEST)
-                           .entity("{\"error\": \"" + e.getMessage() + "\"}")
-                           .build();
-        }
+        // Attempt to add the sensor to validate the room relationship
+        // Exceptions (like LinkedResourceNotFoundException) will be caught by the ExceptionMapper
+        dataStore.addSensor(newSensor);
+        
+        // Build the URI for the newly created sensor dynamically
+        URI location = uriInfo.getAbsolutePathBuilder().path(newSensor.getId()).build();
+        
+        // Return 201 Created with Location header and the generated entity
+        return Response.created(location).entity(newSensor).build();
     }
 
     // Handles GET requests for specific sensor details

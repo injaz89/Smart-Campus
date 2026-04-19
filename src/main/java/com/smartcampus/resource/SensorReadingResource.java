@@ -46,6 +46,12 @@ public class SensorReadingResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addReading(SensorReading newReading, @Context UriInfo uriInfo) {
+        // Validation for MAINTENANCE mode
+        com.smartcampus.model.Sensor sensor = dataStore.getSensors().get(this.sensorId);
+        if (sensor != null && "MAINTENANCE".equalsIgnoreCase(sensor.getStatus())) {
+            throw new com.smartcampus.model.errors.SensorUnavailableException("Sensor is in MAINTENANCE mode and cannot accept new readings.");
+        }
+
         // Enforce the parent context relationship
         newReading.setSensorId(this.sensorId);
         

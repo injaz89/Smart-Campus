@@ -62,4 +62,16 @@ public class RoomResource {
         // Return the room details
         return Response.ok(room).build();
     }
+
+    @DELETE
+    @Path("/{roomId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteRoom(@PathParam("roomId") String roomId) {
+        // Attempt to delete. Throws RoomNotEmptyException if it has active sensors or doesn't exist
+        // The exception will be automatically mapped to a 409 Conflict.
+        dataStore.deleteRoom(roomId);
+        
+        // Return 204 No Content for successful deletion
+        return Response.noContent().build();
+    }
 }
