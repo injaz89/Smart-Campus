@@ -84,13 +84,16 @@ public class CampusDataStore {
 
     // Remove the room from the data store
     public void deleteRoom(String roomId) {
+        if (!canDeleteRoom(roomId)) {
+            throw new com.smartcampus.model.errors.RoomNotEmptyException("Cannot delete room: It contains active sensors or does not exist.");
+        }
         rooms.remove(roomId);
     }
 
     // Add a new sensor to the map, validating its room first
     public void addSensor(Sensor sensor) {
         if (!roomExists(sensor.getRoomId())) {
-            throw new IllegalArgumentException("Cannot add sensor: Room with ID " + sensor.getRoomId() + " does not exist.");
+            throw new com.smartcampus.model.errors.LinkedResourceNotFoundException("Cannot add sensor: Room with ID " + sensor.getRoomId() + " does not exist.");
         }
         if (sensor != null && sensor.getId() != null) {
             sensors.put(sensor.getId(), sensor);
