@@ -1,5 +1,8 @@
 package com.smartcampus.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represents a physical room in the smart campus.
  */
@@ -7,6 +10,7 @@ public class Room {
     private String id;
     private String name;
     private int capacity;
+    private List<String> sensorIds = new ArrayList<>();
 
     public Room() {
         // Default constructor required for JSON mapping
@@ -40,5 +44,13 @@ public class Room {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public List<String> getSensorIds() {
+        return sensorIds;
+    }
+
+    public void setSensorIds(List<String> sensorIds) {
+        this.sensorIds = sensorIds;
     }
 }

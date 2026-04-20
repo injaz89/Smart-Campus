@@ -1,17 +1,40 @@
 package com.smartcampus;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+import org.glassfish.jersey.server.ResourceConfig;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * Main class to bootstrap the embedded Grizzly HTTP Server.
+ */
+public class Main {
+    // Base URI the Grizzly HTTP server will listen on
+    public static final String BASE_URI = "http://localhost:8080/api/v1/";
+
+    /**
+     * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
+     * @return Grizzly HTTP server.
+     */
+    public static HttpServer startServer() {
+        // Create a resource config that scans for JAX-RS resources and providers
+        final ResourceConfig rc = new ResourceConfig().packages("com.smartcampus");
+
+        // Create and start a new instance of grizzly http server
+        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+    }
+
+    public static void main(String[] args) {
+        try {
+            final HttpServer server = startServer();
+            System.out.println(String.format("Smart Campus API started with endpoints available at "
+                    + "%s\nHit Ctrl-C to stop it...", BASE_URI));
+            Thread.currentThread().join();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

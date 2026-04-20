@@ -97,6 +97,10 @@ public class CampusDataStore {
         }
         if (sensor != null && sensor.getId() != null) {
             sensors.put(sensor.getId(), sensor);
+            Room room = getRoomById(sensor.getRoomId());
+            if (room != null) {
+                room.getSensorIds().add(sensor.getId());
+            }
         }
     }
 
