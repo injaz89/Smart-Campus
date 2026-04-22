@@ -30,8 +30,23 @@ public class Main {
     public static void main(String[] args) {
         try {
             final HttpServer server = startServer();
-            System.out.println(String.format("Smart Campus API started with endpoints available at "
-                    + "%s\nHit Ctrl-C to stop it...", BASE_URI));
+            
+            System.out.println("\n---------------------------------------------------------");
+            System.out.println("[INFO] Bootstrapping Smart Campus API...");
+            System.out.println("[INFO] Initializing JAX-RS ResourceConfig...");
+            System.out.println("[INFO] Deploying endpoints on Grizzly HTTP Server...");
+            System.out.println("\n[SUCCESS] Smart Campus API is now ONLINE!");
+            System.out.println("---------------------------------------------------------");
+            System.out.println("Base Web URI:    " + BASE_URI);
+            System.out.println("\nAvailable Endpoint Groups:");
+            System.out.println("  -> [GET]               /api/v1/         (Discovery)");
+            System.out.println("  -> [GET|POST|DELETE]   /api/v1/rooms    (Room Management)");
+            System.out.println("  -> [GET|POST]          /api/v1/sensors  (Sensor Context)");
+            System.out.println("  -> [GET|POST]          .../readings     (Telemetry History)");
+            System.out.println("\n** Application is actively listening on port 8080 **");
+            System.out.println("Stop the continuous NetBeans process (or hit Ctrl-C) to terminate.");
+            System.out.println("---------------------------------------------------------\n");
+
             Thread.currentThread().join();
         } catch (InterruptedException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
